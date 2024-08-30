@@ -1,4 +1,4 @@
-import express, { Express } from 'express';
+import express from 'express';
 import cors from 'cors';
 import cookieParser from "cookie-parser"
 import 'dotenv/config';
@@ -12,7 +12,7 @@ const router = createRouter()
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser())
-app.use(cors({ credentials: false }));
+app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 
 app.use('/api', router)
 

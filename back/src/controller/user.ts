@@ -26,8 +26,11 @@ export const signIn = async (req: Request, res: Response) => {
     return res.status(200).json(user)
   }
   catch (e) {
-    console.log(e)
-    return res.status(500).send(e)
+    if (e instanceof Error) {
+      const { message } = e;
+      if (message === '401') return res.status(401).send('Invalid Crentional')
+
+    }
   }
 }
 

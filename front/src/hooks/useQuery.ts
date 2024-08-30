@@ -20,13 +20,13 @@ export default function useQuery<T>(url: string, lazy = false) {
     // this function is calling useCallback to stop an infinite loop since it is in the dependency array of useEffect
     const runQuery = useCallback(() => {
         setLoading(true);
-        try {
-            handleSuccess();
-        } catch (e) {
-            handleError(e);
-        } finally {
+
+        handleSuccess().catch(e => {
+            handleError(e)
+        }).finally(() => {
             setLoading(false);
-        }
+        })
+
     }, [url]);
 
     useEffect(() => {

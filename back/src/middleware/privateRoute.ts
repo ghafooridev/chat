@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 export const privateRoute = async (req: any, res: Response, next: NextFunction) => {
   try {
-    const token = req.cookies.jwt;
+    const token = req.cookies.token;
     if (!token) {
       return res.status(401).json({ error: "Unauthorized... No Token" })
     }

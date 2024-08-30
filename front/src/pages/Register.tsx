@@ -1,22 +1,15 @@
-import { ChangeEvent, useState } from "react";
-import Input from "src/component/Inputs";
+import Input from "src/component/Input";
 import { HttpMethod } from "src/helpers/constants";
+import { useForm, SubmitHandler } from "react-hook-form"
 import useMutation from "src/hooks/useMutation";
 import { NewUser } from "src/types";
 
 const Register = () => {
-  const [inputs, setInputs] = useState<Partial<NewUser>>()
   const { execute } = useMutation();
+  const { handleSubmit, register, formState: { errors } } = useForm<NewUser>()
 
-  const onChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setInputs({ ...inputs, [name]: value })
-  }
-
-  const onSubmit = () => {
-    console.log(inputs);
-
-    execute({ url: `user`, body: inputs, method: HttpMethod.POST });
+  const onSubmit: SubmitHandler<NewUser> = (data: NewUser) => {
+    execute({ url: `user/signup`, body: data, method: HttpMethod.POST });
   }
 
   return (
@@ -25,14 +18,26 @@ const Register = () => {
         <h1 className="text-3xl font-semibold text-center text-gray-700">
           Register
         </h1>
-        <form className="space-y-4">
-          <Input label="First Name" name="firstName" placeholder="First Name" onChange={onChangeInput} />
-          <Input label="Last Name" name="lastName" placeholder="Last Name" onChange={onChangeInput} />
-          <Input label="Email" name="email" placeholder="Email" onChange={onChangeInput} />
-          <Input label="Password" name="password" type="password" placeholder="Password" onChange={onChangeInput} />
+        <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+          <Input
+            register={register("firstName", { required: "FirstName is Required" })}
+            error={errors.firstName}
+            label="First Name" name="firstName" placeholder="First Name" />
+          <Input
+            register={register("lastName", { required: "LastName is Required" })}
+            error={errors.lastName}
+            label="Last Name" name="lastName" placeholder="Last Name" />
+          <Input
+            register={register("email", { required: "Email is Required", pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: "Email Is Not Valid" } })}
+            error={errors.email}
+            label="Email" name="email" placeholder="Email" />
+          <Input
+            register={register("password", { required: "Password is Required", minLength: { value: 6, message: "Password Should have at least 6 characters" } })}
+            error={errors.password}
+            label="Password" name="password" placeholder="Password" type="password" />
 
           <div>
-            <button className="btn btn-block btn-primary text-white" onClick={onSubmit}>Register</button>
+            <input type="submit" value="submit" className="btn btn-block btn-primary text-white" />
           </div>
         </form>
       </div>

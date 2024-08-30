@@ -16,10 +16,9 @@ export default function useMutation<T>() {
     const [error, setError] = useState<string>();
     const [loading, setLoading] = useState(false);
 
-    const handleError = (error: unknown) => {
-        if (error instanceof Error) setError(error.message);
-        toast.error("Something Wrong")
-
+    const handleError = (error: any) => {
+        setError(error?.response?.data);
+        toast.error(error?.response?.data)
     };
 
     const handleSuccess = async (options: MutationOption) => {
@@ -36,13 +35,12 @@ export default function useMutation<T>() {
     const runMutate = useCallback((options: MutationOption) => {
         setLoading(true);
 
-        try {
-            handleSuccess(options);
-        } catch (e) {
-            handleError(e);
-        } finally {
+        handleSuccess(options).catch(e => {
+            handleError(e)
+        }).finally(() => {
             setLoading(false);
-        }
+        })
+
     }, []);
 
     return { data, loading, error, execute: runMutate };

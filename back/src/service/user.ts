@@ -43,9 +43,9 @@ export const signUpService = async (body: User, res: Response): Promise<NewUser 
 export const signInService = async (body: Pick<User, "email" | "password">, res: Response): Promise<User | undefined> => {
   const findUser = await findUserByEmail(body.email)
 
-  const validPassword = bcryptjs.compare(body.password, findUser?.password || "");
+  const validPassword = await bcryptjs.compare(body.password, findUser?.password || "");
 
-  if (!findUser || !validPassword) throw new Error("INVALID CREDENTIAL")
+  if (!findUser || !validPassword) throw new Error('401')
 
 
   setCookie(findUser.id, res)
@@ -61,7 +61,7 @@ export const signInService = async (body: Pick<User, "email" | "password">, res:
 }
 
 export const signOutService = async (res: Response) => {
-  res.cookie("jwt", "", { maxAge: 0 });
+  res.cookie("token", "", { maxAge: 0 });
   return true
 }
 

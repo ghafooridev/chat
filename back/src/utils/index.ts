@@ -7,7 +7,7 @@ const generateToken = (userId: string) => {
 }
 export const setCookie = (userId: string, res: Response) => {
     const token = generateToken(userId);
-    res.cookie("jwt", token, { maxAge: 24 * 60 * 3600, httpOnly: true, sameSite: "strict", secure: false })
+    res.cookie("token", token, { maxAge: 24 * 60 * 3600, httpOnly: true, sameSite: "strict", secure: false })
 }
 
 export const getAvatar = (firstName: string, lastName: string) => {

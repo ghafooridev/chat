@@ -13,5 +13,8 @@
   "description": "",
   "devDependencies": {
     "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "react-hook-form": "^7.53.0"
   }
 }
