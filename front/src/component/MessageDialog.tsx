@@ -28,7 +28,6 @@ const MessageDialog: FC<Message> = (props) => {
                 <time className="text-xs opacity-50">{ConvertDateToISO(props.createdAt)}</time>
             </div>
             <div className={`chat-bubble ${isMe && 'bg-primary'}`}>{props.content}</div>
-            <div className="chat-footer opacity-50">Delivered</div>
         </div>
     )
 }

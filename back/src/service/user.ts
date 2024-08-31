@@ -75,6 +75,5 @@ export const getUsersService = async (senderId: string) => {
     avatar: userSchema.avatar
   }).from(userSchema)
     .where(ne(userSchema.id, senderId))
-  console.log(users)
   return users
 }

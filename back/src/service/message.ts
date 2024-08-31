@@ -1,3 +1,4 @@
+import { getReceiverSocketId, io } from './../socket/index';
 import { eq } from "drizzle-orm";
 import { db } from "../db"
 import { messageSchema, NewMessage } from '../db/schema/message';
@@ -20,7 +21,13 @@ export const sendMessageService = async (body: NewMessage) => {
 
   const newMessage = await db.insert(messageSchema).values({ ...body, conversationId }).returning();
   if (newMessage.length) {
+
     // add socket.io here
+    const receiverSocketId = getReceiverSocketId(receiverId);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("newMessage", newMessage)
+    }
+
     return newMessage[0]
   }
   else {

@@ -17,7 +17,7 @@ const UserList = () => {
       {users?.map((item: User) => {
         return (
           <div key={item.id}>
-            <UserCard status="online" {...item} />
+            <UserCard  {...item} />
           </div>
         )
       })}

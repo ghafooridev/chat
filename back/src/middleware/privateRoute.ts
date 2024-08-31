@@ -13,7 +13,7 @@ export const privateRoute = async (req: any, res: Response, next: NextFunction) 
     if (!decodedToken) {
       return res.status(401).json({ error: "Unauthorized... Invalid Token" })
     }
-    console.log(token, decodedToken)
+
     const findUser = await findUserById((decodedToken as any).userId);
     if (!findUser) {
       return res.status(401).json({ error: "User Not Found" })
@@ -23,7 +23,7 @@ export const privateRoute = async (req: any, res: Response, next: NextFunction) 
 
   }
   catch (e) {
-    console.log('private route')
+
     return res.status(401).json({ error: "internal server error... " })
   }
 }

@@ -17,7 +17,7 @@ const ChatBox = () => {
       {!selectedConversation ? <NoSelectedChat /> :
         <div>
           <MessageList />
-          <MessageInput />
+          {/* <MessageInput /> */}
         </div>}
     </>
   )
