@@ -3,7 +3,7 @@ import { db } from "../db"
 import { and, eq, ne } from "drizzle-orm";
 import bcryptjs from "bcryptjs";
 import { Response } from 'express';
-import { getAvatar, setCookie } from '../utils';
+import { getAvatar, omitFields, setCookie } from '../utils';
 
 export const findUserByEmail = async (email: string) => {
   const findUser = await db.query.userSchema.findFirst({
@@ -20,7 +20,7 @@ export const findUserById = async (id: string) => {
 }
 
 
-export const signUpService = async (body: User, res: Response): Promise<NewUser | undefined> => {
+export const signUpService = async (body: User, res: Response): Promise<Omit<NewUser, "password"> | undefined> => {
   const user = await db.select().from(userSchema).where(eq(userSchema.email, body.email));
   if (user.length) throw new Error("USER IS ALREADY EXIST");
 
@@ -34,13 +34,14 @@ export const signUpService = async (body: User, res: Response): Promise<NewUser 
   const newUser = await db.insert(userSchema).values(newUserData).returning();
   if (newUser.length) {
     setCookie(newUser[0].id, res);
-    return newUser[0]
+    const userWithoutPassword = omitFields(newUser[0], ['password']);
+    return userWithoutPassword
   }
   else throw new Error("USER IS INVALID");
 }
 
 
-export const signInService = async (body: Pick<User, "email" | "password">, res: Response): Promise<User | undefined> => {
+export const signInService = async (body: Pick<User, "email" | "password">, res: Response): Promise<Omit<NewUser, "password"> | undefined> => {
   const findUser = await findUserByEmail(body.email)
 
   const validPassword = await bcryptjs.compare(body.password, findUser?.password || "");
@@ -56,7 +57,8 @@ export const signInService = async (body: Pick<User, "email" | "password">, res:
 
   if (user) {
     setCookie(user.id, res);
-    return user
+    const userWithoutPassword = omitFields(user, ['password']);
+    return userWithoutPassword
   }
 }
 

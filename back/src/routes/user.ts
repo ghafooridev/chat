@@ -10,9 +10,9 @@ import { privateRoute } from "../middleware/privateRoute";
 
 const userRouter = Router();
 
-userRouter.post('/signUp', signUp);
-userRouter.post('/signIn', signIn);
-userRouter.post('/signOut', signOut);
+userRouter.post('/signup', signUp);
+userRouter.post('/signin', signIn);
+userRouter.post('/signout', signOut);
 userRouter.get('/', privateRoute, getUsers);
 
 export default userRouter;

@@ -1,16 +1,26 @@
-import Input from "src/component/Input";
+import Input from "src/component/SimpleInput";
 import { HttpMethod } from "src/helpers/constants";
 import { useForm, SubmitHandler } from "react-hook-form"
 import useMutation from "src/hooks/useMutation";
-import { NewUser } from "src/types";
+import { NewUser, User } from "src/types";
+import { useEffect } from "react";
+import { useUserContext } from "src/contexts/user";
 
 const Register = () => {
-  const { execute } = useMutation();
+  const { execute, data } = useMutation<User>();
   const { handleSubmit, register, formState: { errors } } = useForm<NewUser>()
+  const { setUser } = useUserContext()
 
   const onSubmit: SubmitHandler<NewUser> = (data: NewUser) => {
     execute({ url: `user/signup`, body: data, method: HttpMethod.POST });
   }
+
+  useEffect(() => {
+    if (data) {
+      localStorage.setItem("user", JSON.stringify(data));
+      setUser(data)
+    }
+  }, [data])
 
   return (
     <div className="relative flex flex-col items-center justify-center h-screen overflow-hidden">

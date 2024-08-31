@@ -28,7 +28,6 @@ export default function useMutation<T>() {
         );
 
         setData(res.data);
-        toast.success("Successfully Submitted")
     };
 
     // this function is calling useCallback to stop an infinite loop since it is in the dependency array of useEffect

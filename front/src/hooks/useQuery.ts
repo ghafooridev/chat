@@ -9,7 +9,6 @@ export default function useQuery<T>(url: string, lazy = false) {
 
     const handleError = (error: unknown) => {
         if (error instanceof Error) setError(error.message);
-        // console.log(error.response?.data.err);
     };
 
     const handleSuccess = async () => {

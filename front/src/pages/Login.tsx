@@ -1,17 +1,26 @@
-import Input from "src/component/Input";
+import Input from "src/component/SimpleInput";
 import { HttpMethod } from "src/helpers/constants";
 import { useForm, SubmitHandler } from "react-hook-form"
 import useMutation from "src/hooks/useMutation";
 import { User } from "src/types";
+import { useEffect } from "react";
+import { useUserContext } from "src/contexts/user";
 
 const Login = () => {
-    const { execute } = useMutation();
+    const { execute, data } = useMutation<User>();
     const { handleSubmit, register, formState: { errors } } = useForm<User>()
+    const { setUser } = useUserContext()
 
     const onSubmit: SubmitHandler<User> = (data: User) => {
         execute({ url: `user/signin`, body: data, method: HttpMethod.POST });
     }
 
+    useEffect(() => {
+        if (data) {
+            localStorage.setItem("user", JSON.stringify(data));
+            setUser(data)
+        }
+    }, [data])
     return (
         <div className="relative flex flex-col items-center justify-center h-screen overflow-hidden">
             <div className="w-full p-6 bg-white border-t-4 border-gray-600 rounded-md shadow-md border-top lg:max-w-lg">

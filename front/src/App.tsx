@@ -1,37 +1,20 @@
-import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
-import Cookie from "js-cookie"
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login'
 import Room from './pages/Room'
 import Register from './pages/Register'
+import { useUserContext } from './contexts/user';
 
 
-const getAccessToken = () => {
-  return Cookie.get('accessToken');
-}
 
-// Function to check if the user is authenticated
-const isAuthenticated = () => {
-  return !!getAccessToken();
-}
-
-const ProtectedRoute = (props: { isAuthenticated: boolean }) => {
-  const { isAuthenticated } = props
-  if (!isAuthenticated) {
-    return <Navigate to={'/login'} replace />;
-  }
-
-  return <Outlet />;
-};
 
 function App() {
+  const { user } = useUserContext();
 
   return (
     <Routes>
-      <Route element={<ProtectedRoute isAuthenticated={isAuthenticated()} />}>
-        <Route path="/" element={<Room />} />
-      </Route>
-      <Route path="/register" element={<Register />} />
-      <Route path="/login" element={<Login />} />
+      <Route path="/" element={user ? <Room /> : <Navigate to="/login" />} />
+      <Route path="/register" element={user ? <Navigate to="/" /> : <Register />} />
+      <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
     </Routes>
   )
 }
