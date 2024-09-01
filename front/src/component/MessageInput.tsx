@@ -38,8 +38,8 @@ const MessageInput = () => {
 
   return (
     <div className="flex w-full mt-4 gap-2">
-      <label className="input input-bordered flex items-center gap-2 w-full">
-        <input type="text" className="grow" placeholder="Type Here ..." value={messageValue} onChange={onChangeInput} onKeyDown={onPressEnter} />
+      <label className="input input-bordered flex items-center gap-2 w-full bg-white text-gray-600">
+        <input type="text" className=" " placeholder="Type Here ..." value={messageValue} onChange={onChangeInput} onKeyDown={onPressEnter} />
       </label>
       <button className="btn btn-square btn-ghost " onClick={onSendMessage}>
         <SendIcon />

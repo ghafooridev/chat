@@ -5,11 +5,18 @@ import useMutation from "src/hooks/useMutation";
 import { NewUser, User } from "src/types";
 import { useEffect } from "react";
 import { useUserContext } from "src/contexts/user";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const { execute, data } = useMutation<User>();
   const { handleSubmit, register, formState: { errors } } = useForm<NewUser>()
-  const { setUser } = useUserContext()
+  const { setUser } = useUserContext();
+  const navigate = useNavigate()
+
+  const onGoToLogin = () => {
+    navigate('/login')
+  }
+
 
   const onSubmit: SubmitHandler<NewUser> = (data: NewUser) => {
     execute({ url: `user/signup`, body: data, method: HttpMethod.POST });
@@ -45,7 +52,10 @@ const Register = () => {
             register={register("password", { required: "Password is Required", minLength: { value: 6, message: "Password Should have at least 6 characters" } })}
             error={errors.password}
             label="Password" name="password" placeholder="Password" type="password" />
-
+          <div className="flex items-center">
+            <p>Do You Have An Account?</p>
+            <button className="btn btn-link" onClick={onGoToLogin}>Login</button>
+          </div>
           <div>
             <input type="submit" value="submit" className="btn btn-block btn-primary text-white" />
           </div>

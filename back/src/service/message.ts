@@ -25,6 +25,7 @@ export const sendMessageService = async (body: NewMessage) => {
     // add socket.io here
     const receiverSocketId = getReceiverSocketId(receiverId);
     if (receiverSocketId) {
+      io.emit("notification", newMessage);
       io.to(receiverSocketId).emit("newMessage", newMessage)
     }
 
